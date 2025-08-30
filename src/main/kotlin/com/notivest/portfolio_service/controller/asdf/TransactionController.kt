@@ -32,9 +32,9 @@ class TransactionController(
         return ResponseEntity.status(HttpStatus.CREATED).body(TransactionResponse.fromEntity(tx))
     }
 
-    @GetMapping("/{txId}")
-    fun get(@PathVariable pid: UUID, @PathVariable txId: UUID, principal: Principal) =
-        TransactionResponse.fromEntity(service.get(principal.name, pid, txId))
+    @GetMapping("/{transactionId}")
+    fun get(@PathVariable pid: UUID, @PathVariable transactionId: UUID, principal: Principal) =
+        TransactionResponse.fromEntity(service.get(principal.name, pid, transactionId))
 
     @GetMapping
     fun search(@PathVariable pid: UUID,
