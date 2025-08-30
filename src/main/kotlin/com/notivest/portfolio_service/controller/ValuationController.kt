@@ -1,4 +1,4 @@
-package com.notivest.portfolio_service.controller.asdf
+package com.notivest.portfolio_service.controller
 
 import com.notivest.portfolio_service.controller.dto.RunValuationRequest
 import com.notivest.portfolio_service.controller.dto.ValuationResponse
