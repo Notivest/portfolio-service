@@ -1,8 +1,6 @@
 package com.notivest.portfolioservice.controller
 
-import com.notivest.portfolioservice.controller.PortfolioController
 import com.notivest.portfolioservice.controller.dto.CreatePortfolioRequest
-import com.notivest.portfolioservice.controller.dto.PortfolioResponse
 import com.notivest.portfolioservice.models.PortfolioEntity
 import com.notivest.portfolioservice.service.interfaces.PortfolioService
 import org.junit.jupiter.api.Assertions.assertEquals

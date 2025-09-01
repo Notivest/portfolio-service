@@ -7,10 +7,11 @@ import com.notivest.portfolioservice.models.PortfolioEntity
 import com.notivest.portfolioservice.models.TransactionEntity
 import com.notivest.portfolioservice.models.enums.TransactionType
 import com.notivest.portfolioservice.repository.TransactionRepository
-import com.notivest.portfolioservice.service.impl.TransactionalServiceImpl
 import com.notivest.portfolioservice.service.interfaces.AccountService
 import com.notivest.portfolioservice.service.interfaces.PortfolioService
 import com.notivest.portfolioservice.service.interfaces.PositionService
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.kotlin.any
@@ -22,8 +23,6 @@ import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 
 class TransactionalServiceImplTest {
     private val transactionRepository: TransactionRepository = mock()

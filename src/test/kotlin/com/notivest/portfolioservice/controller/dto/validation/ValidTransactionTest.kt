@@ -5,12 +5,12 @@ import com.notivest.portfolioservice.models.enums.TransactionType
 import jakarta.validation.ConstraintViolation
 import jakarta.validation.Validation
 import jakarta.validation.Validator
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.util.UUID
-import org.junit.jupiter.api.Assertions.assertTrue
 
 class ValidTransactionTest {
     private lateinit var validator: Validator

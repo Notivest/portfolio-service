@@ -1,12 +1,11 @@
 package com.notivest.portfolioservice.controller
 
-import com.notivest.portfolioservice.controller.GlobalExceptionHandler
 import com.notivest.portfolioservice.controller.exception.ConflictException
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.mock
 import org.springframework.http.HttpStatus
 import org.springframework.web.context.request.WebRequest
-import org.junit.jupiter.api.Assertions.assertEquals
 
 class GlobalExceptionHandlerTest {
     private val handler = GlobalExceptionHandler()
