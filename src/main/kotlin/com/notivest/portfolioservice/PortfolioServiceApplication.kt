@@ -1,4 +1,4 @@
-package com.notivest.portfolio_service
+package com.notivest.portfolioservice
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class PortfolioServiceApplication
 
 fun main(args: Array<String>) {
-	runApplication<PortfolioServiceApplication>(*args)
+    runApplication<PortfolioServiceApplication>(*args)
 }
