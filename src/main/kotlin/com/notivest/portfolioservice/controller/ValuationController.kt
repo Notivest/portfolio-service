@@ -17,7 +17,7 @@ import java.time.OffsetDateTime
 import java.util.UUID
 
 @RestController
-@RequestMapping("/v1/portfolios/{pid}/valuation")
+@RequestMapping("/{pid}/valuation")
 class ValuationController(
     private val service: ValuationService,
 ) {

@@ -19,7 +19,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 @RestController
-@RequestMapping("/v1/portfolios/{pid}/transactions")
+@RequestMapping("/{pid}/transactions")
 class TransactionController(
     private val service: TransactionService,
 ) {

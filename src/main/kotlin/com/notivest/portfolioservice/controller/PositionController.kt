@@ -15,7 +15,7 @@ import java.security.Principal
 import java.util.UUID
 
 @RestController
-@RequestMapping("/v1/portfolios/{pid}/positions")
+@RequestMapping("/{pid}/positions")
 class PositionController(
     private val service: PositionService,
 ) {

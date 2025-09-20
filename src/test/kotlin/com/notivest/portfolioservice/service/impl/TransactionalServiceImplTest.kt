@@ -44,7 +44,7 @@ class TransactionalServiceImplTest {
 
     @Test
     fun `should create BUY transaction successfully`() {
-        val portfolio = PortfolioEntity(portfolioId, userId, "Test Portfolio", "USD")
+        val portfolio = PortfolioEntity(userId, "Test Portfolio", "USD")
         val account = AccountEntity(accountId, portfolioId, "Test Account", "USD")
         val transactionDto =
             TransactionDTO(
@@ -169,7 +169,7 @@ class TransactionalServiceImplTest {
 
     @Test
     fun `should create SELL transaction successfully`() {
-        val portfolio = PortfolioEntity(portfolioId, userId, "Test Portfolio", "USD")
+        val portfolio = PortfolioEntity(userId, "Test Portfolio", "USD")
         val account = AccountEntity(accountId, portfolioId, "Test Account", "USD")
         val transactionDto =
             TransactionDTO(
@@ -211,7 +211,7 @@ class TransactionalServiceImplTest {
 
     @Test
     fun `should create CASH transaction without position recompute`() {
-        val portfolio = PortfolioEntity(portfolioId, userId, "Test Portfolio", "USD")
+        val portfolio = PortfolioEntity(userId, "Test Portfolio", "USD")
         val account = AccountEntity(accountId, portfolioId, "Test Account", "USD")
         val transactionDto =
             TransactionDTO(

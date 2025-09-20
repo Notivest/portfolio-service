@@ -25,7 +25,6 @@ class SimplePortfolioControllerTest {
         val portfolioId = UUID.randomUUID()
         val testPortfolio =
             PortfolioEntity(
-                id = portfolioId,
                 userId = "testuser",
                 name = "Test Portfolio",
                 baseCurrency = "USD",
@@ -37,7 +36,6 @@ class SimplePortfolioControllerTest {
         val response = controller.create(request, principal)
 
         assertEquals(HttpStatus.CREATED, response.statusCode)
-        assertEquals(portfolioId, response.body?.id)
         assertEquals("Test Portfolio", response.body?.name)
         assertEquals("USD", response.body?.baseCurrency)
     }
@@ -47,7 +45,6 @@ class SimplePortfolioControllerTest {
         val portfolioId = UUID.randomUUID()
         val testPortfolio =
             PortfolioEntity(
-                id = portfolioId,
                 userId = "testuser",
                 name = "Test Portfolio",
                 baseCurrency = "USD",
@@ -59,7 +56,6 @@ class SimplePortfolioControllerTest {
         val response = controller.get(portfolioId, principal)
 
         assertEquals(HttpStatus.OK, response.statusCode)
-        assertEquals(portfolioId, response.body?.id)
         assertEquals("Test Portfolio", response.body?.name)
         assertEquals("USD", response.body?.baseCurrency)
     }

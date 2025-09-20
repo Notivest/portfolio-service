@@ -19,7 +19,7 @@ import java.security.Principal
 import java.util.UUID
 
 @RestController
-@RequestMapping("/v1/portfolios/{pid}/accounts")
+@RequestMapping("/{pid}/accounts")
 class AccountController(
     private val service: AccountService,
 ) {

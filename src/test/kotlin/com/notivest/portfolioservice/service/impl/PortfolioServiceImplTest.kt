@@ -27,7 +27,6 @@ class PortfolioServiceImplTest {
         val baseCurrency = "usd"
         val expectedEntity =
             PortfolioEntity(
-                id = UUID.randomUUID(),
                 userId = userId,
                 name = name,
                 baseCurrency = "USD",
@@ -61,7 +60,6 @@ class PortfolioServiceImplTest {
         val portfolioId = UUID.randomUUID()
         val expectedEntity =
             PortfolioEntity(
-                id = portfolioId,
                 userId = userId,
                 name = "Test Portfolio",
                 baseCurrency = "USD",
@@ -94,7 +92,6 @@ class PortfolioServiceImplTest {
         val portfolioId = UUID.randomUUID()
         val entity =
             PortfolioEntity(
-                id = portfolioId,
                 userId = otherUserId,
                 name = "Other's Portfolio",
                 baseCurrency = "USD",
@@ -115,13 +112,11 @@ class PortfolioServiceImplTest {
         val portfolios =
             listOf(
                 PortfolioEntity(
-                    id = UUID.randomUUID(),
                     userId = userId,
                     name = "Portfolio 1",
                     baseCurrency = "USD",
                 ),
                 PortfolioEntity(
-                    id = UUID.randomUUID(),
                     userId = userId,
                     name = "Portfolio 2",
                     baseCurrency = "EUR",
@@ -145,7 +140,6 @@ class PortfolioServiceImplTest {
         val portfolioId = UUID.randomUUID()
         val originalEntity =
             PortfolioEntity(
-                id = portfolioId,
                 userId = userId,
                 name = "Original Name",
                 baseCurrency = "USD",
@@ -169,7 +163,6 @@ class PortfolioServiceImplTest {
         val portfolioId = UUID.randomUUID()
         val originalEntity =
             PortfolioEntity(
-                id = portfolioId,
                 userId = userId,
                 name = "Original Name",
                 baseCurrency = "USD",
@@ -190,7 +183,6 @@ class PortfolioServiceImplTest {
         val portfolioId = UUID.randomUUID()
         val entity =
             PortfolioEntity(
-                id = portfolioId,
                 userId = userId,
                 name = "Test Portfolio",
                 baseCurrency = "USD",

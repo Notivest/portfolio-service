@@ -20,7 +20,7 @@ import java.security.Principal
 import java.util.UUID
 
 @RestController
-@RequestMapping("/v1/portfolios")
+@RequestMapping("/portfolio")
 class PortfolioController(
     private val service: PortfolioService,
 ) {

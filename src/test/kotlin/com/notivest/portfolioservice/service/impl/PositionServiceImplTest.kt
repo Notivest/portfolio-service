@@ -31,7 +31,6 @@ class PositionServiceImplTest {
     private val symbolId = "AAPL"
     private val testPortfolio =
         PortfolioEntity(
-            id = portfolioId,
             userId = userId,
             name = "Test Portfolio",
             baseCurrency = "USD",

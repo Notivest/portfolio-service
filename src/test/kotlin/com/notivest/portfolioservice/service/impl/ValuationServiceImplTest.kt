@@ -43,7 +43,6 @@ class ValuationServiceImplTest {
     private val accountId = UUID.randomUUID()
     private val testPortfolio =
         PortfolioEntity(
-            id = portfolioId,
             userId = userId,
             name = "Test Portfolio",
             baseCurrency = "USD",
