@@ -1,9 +1,9 @@
 package com.notivest.portfolioservice.repository
 
-import com.notivest.portfolioservice.models.portfolio.PortfolioEntity
+import com.notivest.portfolioservice.models.HoldingEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface PortfolioRepository : JpaRepository<PortfolioEntity, UUID>
+interface HoldingRepository : JpaRepository<HoldingEntity, UUID>
