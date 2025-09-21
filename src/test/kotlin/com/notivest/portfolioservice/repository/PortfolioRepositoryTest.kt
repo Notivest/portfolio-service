@@ -17,17 +17,20 @@ import java.util.UUID
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE) // usa H2 + Flyway del profile test
 class PortfolioRepositoryTest {
-
     @Autowired
     lateinit var portfolioRepository: PortfolioRepository
 
-    private fun newPortfolio(userId: UUID, deleted: Boolean = false): PortfolioEntity {
-        val p = PortfolioEntity(
-            userId = userId,
-            name = "Main",
-            baseCurrency = "USD",
-            status = PortfolioStatus.ACTIVE,
-        )
+    private fun newPortfolio(
+        userId: UUID,
+        deleted: Boolean = false,
+    ): PortfolioEntity {
+        val p =
+            PortfolioEntity(
+                userId = userId,
+                name = "Main",
+                baseCurrency = "USD",
+                status = PortfolioStatus.ACTIVE,
+            )
         if (deleted) p.deletedAt = Instant.now()
         return portfolioRepository.saveAndFlush(p)
     }
@@ -36,12 +39,14 @@ class PortfolioRepositoryTest {
     fun `findAllByUserIdAndDeletedAtIsNull filtra soft-delete y pagina`() {
         val user = UUID.randomUUID()
         val keep = newPortfolio(user, deleted = false)
-        newPortfolio(user, deleted = true)               // filtrado
+        newPortfolio(user, deleted = true) // filtrado
         newPortfolio(UUID.randomUUID(), deleted = false) // otro usuario
 
-        val page = portfolioRepository.findAllByUserIdAndDeletedAtIsNull(
-            user, PageRequest.of(0, 10)
-        )
+        val page =
+            portfolioRepository.findAllByUserIdAndDeletedAtIsNull(
+                user,
+                PageRequest.of(0, 10),
+            )
 
         assertThat(page.totalElements).isEqualTo(1)
         assertThat(page.content).extracting("id").containsExactly(keep.id)

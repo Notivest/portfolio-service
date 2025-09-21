@@ -19,23 +19,32 @@ import java.util.UUID
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class HoldingRepositoryTest {
-
     @Autowired lateinit var portfolioRepository: PortfolioRepository
+
     @Autowired lateinit var holdingRepository: HoldingRepository
 
     private fun newPortfolio(userId: UUID = UUID.randomUUID()) =
         portfolioRepository.saveAndFlush(
             PortfolioEntity(
-                userId = userId, name = "Main", baseCurrency = "USD", status = PortfolioStatus.ACTIVE
-            )
+                userId = userId,
+                name = "Main",
+                baseCurrency = "USD",
+                status = PortfolioStatus.ACTIVE,
+            ),
         )
 
-    private fun newHolding(p: PortfolioEntity, symbol: String, qty: BigDecimal) =
-        holdingRepository.saveAndFlush(
-            HoldingEntity(
-                portfolio = p, symbol = symbol, quantity = qty, avgCost = BigDecimal("10.00")
-            )
-        )
+    private fun newHolding(
+        p: PortfolioEntity,
+        symbol: String,
+        qty: BigDecimal,
+    ) = holdingRepository.saveAndFlush(
+        HoldingEntity(
+            portfolio = p,
+            symbol = symbol,
+            quantity = qty,
+            avgCost = BigDecimal("10.00"),
+        ),
+    )
 
     @Test
     fun `findAllByPortfolio_Id devuelve todo y la version paginada pagina`() {
@@ -57,9 +66,12 @@ class HoldingRepositoryTest {
         newHolding(p, "AA", BigDecimal("3"))
         newHolding(p, "MSFT", BigDecimal("2"))
 
-        val page = holdingRepository.findAllByPortfolioIdAndSymbolContainingIgnoreCase(
-            p.id!!, "aa", PageRequest.of(0, 10)
-        )
+        val page =
+            holdingRepository.findAllByPortfolioIdAndSymbolContainingIgnoreCase(
+                p.id!!,
+                "aa",
+                PageRequest.of(0, 10),
+            )
         assertThat(page.content.map { it.symbol }).containsExactlyInAnyOrder("AAPL", "AA")
         assertThat(page.totalElements).isEqualTo(2)
     }
@@ -86,7 +98,7 @@ class HoldingRepositoryTest {
                     symbol = "AAPL",
                     quantity = BigDecimal("2"),
                     avgCost = BigDecimal("20.00"),
-                )
+                ),
             )
         }
     }
