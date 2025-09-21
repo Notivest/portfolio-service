@@ -1,0 +1,15 @@
+package com.notivest.portfolioservice.dto.portfolio.request
+
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
+
+data class PortfolioUpdateRequest(
+    @field:Size(min = 3, max = 80, message = "name must be between 3 and 80 characters")
+    val name: String? = null,
+
+    @field:Pattern(
+        regexp = "^[A-Z]{3}$",
+        message = "baseCurrency must be a 3-letter uppercase ISO 4217 code"
+    )
+    val baseCurrency: String? = null,
+)
