@@ -22,7 +22,7 @@ fun HoldingCreateRequest.toEntity(portfolio: PortfolioEntity): HoldingEntity =
     HoldingEntity(
         portfolio = portfolio,
         symbol = symbol,
-        quantity = quantity,   // null => watchlist (no position)
+        quantity = quantity,
         avgCost = avgCost,
         note = note,
     )

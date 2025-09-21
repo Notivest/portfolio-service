@@ -13,7 +13,6 @@ import java.time.Instant
 import java.util.UUID
 
 class PortfolioMapperTest {
-
     @Test
     fun `toEntity from create sets fields and defaults`() {
         val userId = UUID.randomUUID()
@@ -32,15 +31,16 @@ class PortfolioMapperTest {
 
     @Test
     fun `applyTo only updates non-null fields`() {
-        val entity = PortfolioEntity(
-            id = UUID.randomUUID(),
-            userId = UUID.randomUUID(),
-            name = "Old Name",
-            baseCurrency = "USD",
-        ).apply {
-            createdAt = Instant.parse("2025-01-01T00:00:00Z")
-            updatedAt = Instant.parse("2025-01-02T00:00:00Z")
-        }
+        val entity =
+            PortfolioEntity(
+                id = UUID.randomUUID(),
+                userId = UUID.randomUUID(),
+                name = "Old Name",
+                baseCurrency = "USD",
+            ).apply {
+                createdAt = Instant.parse("2025-01-01T00:00:00Z")
+                updatedAt = Instant.parse("2025-01-02T00:00:00Z")
+            }
 
         // Only change name
         val update = PortfolioUpdateRequest(name = "New Name", baseCurrency = null)
@@ -55,15 +55,16 @@ class PortfolioMapperTest {
     fun `toResponse maps all fields`() {
         val id = UUID.randomUUID()
         val userId = UUID.randomUUID()
-        val entity = PortfolioEntity(
-            id = id,
-            userId = userId,
-            name = "My Portfolio",
-            baseCurrency = "EUR",
-        ).apply {
-            createdAt = Instant.parse("2025-02-01T00:00:00Z")
-            updatedAt = Instant.parse("2025-02-02T00:00:00Z")
-        }
+        val entity =
+            PortfolioEntity(
+                id = id,
+                userId = userId,
+                name = "My Portfolio",
+                baseCurrency = "EUR",
+            ).apply {
+                createdAt = Instant.parse("2025-02-01T00:00:00Z")
+                updatedAt = Instant.parse("2025-02-02T00:00:00Z")
+            }
 
         val dto = entity.toResponse()
 

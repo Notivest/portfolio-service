@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
 class PortfolioRequestDtoTest {
-
     companion object {
         private val factory = Validation.buildDefaultValidatorFactory()
         private val validator = factory.validator
@@ -17,9 +16,12 @@ class PortfolioRequestDtoTest {
         @JvmStatic
         @BeforeAll
         fun beforeAll() { /* no-op */ }
+
         @JvmStatic
         @AfterAll
-        fun afterAll() { factory.close() }
+        fun afterAll() {
+            factory.close()
+        }
     }
 
     @Test
@@ -56,7 +58,6 @@ class PortfolioRequestDtoTest {
         val violations = validator.validate(dto)
         assertThat(violations).anyMatch { it.propertyPath.toString() == "baseCurrency" }
     }
-
 
     @Test
     fun `empty update is valid (no changes)`() {
@@ -107,4 +108,3 @@ class PortfolioRequestDtoTest {
         assertThat(violations).anyMatch { it.propertyPath.toString() == "baseCurrency" }
     }
 }
-

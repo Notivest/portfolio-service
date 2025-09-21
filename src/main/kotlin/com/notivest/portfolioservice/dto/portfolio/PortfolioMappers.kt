@@ -6,7 +6,6 @@ import com.notivest.portfolioservice.dto.portfolio.response.PortfolioResponse
 import com.notivest.portfolioservice.models.portfolio.PortfolioEntity
 import java.util.UUID
 
-
 fun PortfolioEntity.toResponse(): PortfolioResponse =
     PortfolioResponse(
         id = requireNotNull(id) { "PortfolioEntity.id must not be null" },

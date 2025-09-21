@@ -10,25 +10,28 @@ import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
 class HoldingRequestDtoTest {
-
     companion object {
         private val factory = Validation.buildDefaultValidatorFactory()
         private val validator = factory.validator
 
         @JvmStatic @BeforeAll
         fun beforeAll() { /* no-op */ }
+
         @JvmStatic @AfterAll
-        fun afterAll() { factory.close() }
+        fun afterAll() {
+            factory.close()
+        }
     }
 
     @Test
     fun `HoldingCreateRequest valid create with position`() {
-        val dto = HoldingCreateRequest(
-            symbol = "BRK.B",
-            quantity = BigDecimal("10.50"),
-            avgCost = BigDecimal("350.00"),
-            note = "Long-term"
-        )
+        val dto =
+            HoldingCreateRequest(
+                symbol = "BRK.B",
+                quantity = BigDecimal("10.50"),
+                avgCost = BigDecimal("350.00"),
+                note = "Long-term",
+            )
         val violations = validator.validate(dto)
         assertThat(violations).isEmpty()
     }
@@ -89,7 +92,6 @@ class HoldingRequestDtoTest {
         val violations = validator.validate(dto)
         assertThat(violations).isEmpty()
     }
-
 
     @Test
     fun `UpdateRequest empty update is valid (no changes)`() {

@@ -15,25 +15,25 @@ import java.time.Instant
 import java.util.UUID
 
 class HoldingMapperTest {
-
     private fun portfolioWithId(): PortfolioEntity =
         PortfolioEntity(
             id = UUID.randomUUID(),
             userId = UUID.randomUUID(),
             name = "P",
             baseCurrency = "USD",
-            status = PortfolioStatus.ACTIVE
+            status = PortfolioStatus.ACTIVE,
         )
 
     @Test
     fun `toEntity from create sets fields (position)`() {
         val p = portfolioWithId()
-        val req = HoldingCreateRequest(
-            symbol = "AAPL",
-            quantity = BigDecimal("5.0"),
-            avgCost = BigDecimal("150.00"),
-            note = "Long-term"
-        )
+        val req =
+            HoldingCreateRequest(
+                symbol = "AAPL",
+                quantity = BigDecimal("5.0"),
+                avgCost = BigDecimal("150.00"),
+                note = "Long-term",
+            )
 
         val e = req.toEntity(p)
 
@@ -62,27 +62,29 @@ class HoldingMapperTest {
     @Test
     fun `applyTo updates only provided fields`() {
         val p = portfolioWithId()
-        val e = HoldingEntity(
-            id = UUID.randomUUID(),
-            portfolio = p,
-            symbol = "MSFT",
-            quantity = BigDecimal("2"),
-            avgCost = BigDecimal("100.00"),
-            note = "Init"
-        ).apply {
-            createdAt = Instant.parse("2025-03-01T00:00:00Z")
-            updatedAt = Instant.parse("2025-03-02T00:00:00Z")
-        }
+        val e =
+            HoldingEntity(
+                id = UUID.randomUUID(),
+                portfolio = p,
+                symbol = "MSFT",
+                quantity = BigDecimal("2"),
+                avgCost = BigDecimal("100.00"),
+                note = "Init",
+            ).apply {
+                createdAt = Instant.parse("2025-03-01T00:00:00Z")
+                updatedAt = Instant.parse("2025-03-02T00:00:00Z")
+            }
 
-        val update = HoldingUpdateRequest(
-            quantity = BigDecimal("3.5"),
-            avgCost = null,
-            note = "Updated note"
-        )
+        val update =
+            HoldingUpdateRequest(
+                quantity = BigDecimal("3.5"),
+                avgCost = null,
+                note = "Updated note",
+            )
 
         update.applyTo(e)
 
-        assertThat(e.symbol).isEqualTo("MSFT")              // unchanged
+        assertThat(e.symbol).isEqualTo("MSFT") // unchanged
         assertThat(e.quantity).isEqualTo(BigDecimal("3.5")) // updated
         assertThat(e.avgCost).isEqualTo(BigDecimal("100.00")) // unchanged
         assertThat(e.note).isEqualTo("Updated note")
@@ -92,17 +94,18 @@ class HoldingMapperTest {
     fun `toResponse maps all fields`() {
         val p = portfolioWithId()
         val id = UUID.randomUUID()
-        val e = HoldingEntity(
-            id = id,
-            portfolio = p,
-            symbol = "BRK.B",
-            quantity = BigDecimal("1"),
-            avgCost = BigDecimal("400.00"),
-            note = null
-        ).apply {
-            createdAt = Instant.parse("2025-04-01T00:00:00Z")
-            updatedAt = Instant.parse("2025-04-02T00:00:00Z")
-        }
+        val e =
+            HoldingEntity(
+                id = id,
+                portfolio = p,
+                symbol = "BRK.B",
+                quantity = BigDecimal("1"),
+                avgCost = BigDecimal("400.00"),
+                note = null,
+            ).apply {
+                createdAt = Instant.parse("2025-04-01T00:00:00Z")
+                updatedAt = Instant.parse("2025-04-02T00:00:00Z")
+            }
 
         val dto = e.toResponse()
 
