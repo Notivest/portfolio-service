@@ -64,6 +64,11 @@ dependencies {
     // flyway migraciones
     implementation("org.flywaydb:flyway-core")
     implementation("org.flywaydb:flyway-database-postgresql:10.20.1")
+
+
+	testImplementation("io.mockk:mockk:1.13.12")
+	testImplementation("org.assertj:assertj-core:3.26.0")
+	testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
 }
 
 kotlin {

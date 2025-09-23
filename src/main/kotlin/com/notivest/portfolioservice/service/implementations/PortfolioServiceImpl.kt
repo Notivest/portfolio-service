@@ -20,7 +20,6 @@ import java.util.UUID
 class PortfolioServiceImpl(
     private val portfolioRepository: PortfolioRepository,
 ) : PortfolioService {
-
     @Transactional(readOnly = true)
     override fun list(
         userId: UUID,
@@ -46,7 +45,7 @@ class PortfolioServiceImpl(
         req: PortfolioCreateRequest,
     ): PortfolioResponse {
         val entity = req.toEntity(userId)
-        val saved = portfolioRepository.save(entity)
+        val saved = portfolioRepository.saveAndFlush(entity)
         return saved.toResponse()
     }
 
@@ -56,16 +55,23 @@ class PortfolioServiceImpl(
         id: UUID,
         req: PortfolioUpdateRequest,
     ): PortfolioResponse {
-        val entity = portfolioRepository.findByIdAndUserIdAndDeletedAtIsNull(id, userId)
-            .orElseThrow { NotFoundException("Portfolio not found") }
+        val entity =
+            portfolioRepository.findByIdAndUserIdAndDeletedAtIsNull(id, userId)
+                .orElseThrow { NotFoundException("Portfolio not found") }
         req.applyTo(entity)
-        val saved = portfolioRepository.save(entity)
-        return saved.toResponse()    }
+        val saved = portfolioRepository.saveAndFlush(entity)
+        return saved.toResponse()
+    }
 
     @Transactional
-    override fun delete(userId: UUID, id: UUID) {
-        val entity = portfolioRepository.findByIdAndUserIdAndDeletedAtIsNull(id, userId)
-            .orElseThrow { NotFoundException("Portfolio not found") }
+    override fun delete(
+        userId: UUID,
+        id: UUID,
+    ) {
+        val entity =
+            portfolioRepository.findByIdAndUserIdAndDeletedAtIsNull(id, userId)
+                .orElseThrow { NotFoundException("Portfolio not found") }
         entity.deletedAt = Instant.now()
-        portfolioRepository.save(entity)    }
+        portfolioRepository.save(entity)
+    }
 }
