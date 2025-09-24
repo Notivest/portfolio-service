@@ -4,6 +4,7 @@ import com.notivest.portfolioservice.models.HoldingEntity
 import com.notivest.portfolioservice.models.portfolio.PortfolioEntity
 import com.notivest.portfolioservice.models.portfolio.PortfolioStatus
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,87 +20,86 @@ import java.util.UUID
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class HoldingRepositoryTest {
-    @Autowired lateinit var portfolioRepository: PortfolioRepository
 
     @Autowired lateinit var holdingRepository: HoldingRepository
+    @Autowired lateinit var portfolioRepository: PortfolioRepository
 
-    private fun newPortfolio(userId: UUID = UUID.randomUUID()) =
+    private fun newPortfolio(): PortfolioEntity =
         portfolioRepository.saveAndFlush(
             PortfolioEntity(
-                userId = userId,
-                name = "Main",
+                userId = UUID.randomUUID(),
+                name = "My Portfolio",
                 baseCurrency = "USD",
                 status = PortfolioStatus.ACTIVE,
-            ),
+            )
         )
 
-    private fun newHolding(
+    private fun addHolding(
         p: PortfolioEntity,
         symbol: String,
-        qty: BigDecimal,
-    ) = holdingRepository.saveAndFlush(
-        HoldingEntity(
-            portfolio = p,
-            symbol = symbol,
-            quantity = qty,
-            avgCost = BigDecimal("10.00"),
-        ),
-    )
+        quantity: BigDecimal? = null,
+        avgCost: BigDecimal? = null,
+        note: String? = null,
+    ): HoldingEntity =
+        holdingRepository.saveAndFlush(
+            HoldingEntity(
+                portfolio = p,
+                symbol = symbol,
+                quantity = quantity,
+                avgCost = avgCost,
+                note = note,
+            )
+        )
 
     @Test
-    fun `findAllByPortfolio_Id devuelve todo y la version paginada pagina`() {
-        val p = newPortfolio()
-        repeat(3) { i -> newHolding(p, "SYM$i", BigDecimal.ONE) }
+    fun `findAllByPortfolioId returns only that portfolio holdings and supports pagination`() {
+        val p1 = newPortfolio()
+        val p2 = newPortfolio()
 
-        val all = holdingRepository.findAllByPortfolioId(p.id!!)
-        assertThat(all).hasSize(3)
+        repeat(3) { addHolding(p1, "SYM$it") }
+        repeat(2) { addHolding(p2, "OTH$it") }
 
-        val page = holdingRepository.findAllByPortfolioId(p.id!!, PageRequest.of(0, 2))
+        val page = holdingRepository.findAllByPortfolioId(p1.id!!, PageRequest.of(0, 10))
+
         assertThat(page.totalElements).isEqualTo(3)
-        assertThat(page.content).hasSize(2)
+        assertThat(page.content).allMatch { it.portfolio.id == p1.id }
     }
 
     @Test
-    fun `findAllByPortfolio_IdAndSymbolContainingIgnoreCase busca substring case-insensitive`() {
+    fun `findAllByPortfolioIdAndSymbolContainingIgnoreCase filters by substring case-insensitive`() {
         val p = newPortfolio()
-        newHolding(p, "AAPL", BigDecimal("5"))
-        newHolding(p, "AA", BigDecimal("3"))
-        newHolding(p, "MSFT", BigDecimal("2"))
+        addHolding(p, "AAPL")
+        addHolding(p, "MSFT")
+        addHolding(p, "AAPD")
 
-        val page =
-            holdingRepository.findAllByPortfolioIdAndSymbolContainingIgnoreCase(
-                p.id!!,
-                "aa",
-                PageRequest.of(0, 10),
-            )
-        assertThat(page.content.map { it.symbol }).containsExactlyInAnyOrder("AAPL", "AA")
+        val page = holdingRepository.findAllByPortfolioIdAndSymbolContainingIgnoreCase(
+            p.id!!, "aap", PageRequest.of(0, 10)
+        )
+
         assertThat(page.totalElements).isEqualTo(2)
+        assertThat(page.content.map { it.symbol }).containsExactlyInAnyOrder("AAPL", "AAPD")
     }
 
     @Test
-    fun `symbolsByPortfolioId retorna set distinct`() {
+    fun `symbolsByPortfolioId returns distinct set of symbols`() {
         val p = newPortfolio()
-        newHolding(p, "AAPL", BigDecimal("1"))
-        newHolding(p, "MSFT", BigDecimal("2"))
+        addHolding(p, "AAPL")
+        addHolding(p, "MSFT")
 
-        val set = holdingRepository.symbolsByPortfolioId(p.id!!)
-        assertThat(set).containsExactlyInAnyOrder("AAPL", "MSFT")
+        val p2 = newPortfolio()
+        addHolding(p2, "AAPL")
+
+        val symbols = holdingRepository.symbolsByPortfolioId(p.id!!)
+        assertThat(symbols).containsExactlyInAnyOrder("AAPL", "MSFT")
     }
 
     @Test
-    fun `unicidad portfolio+symbol dispara DataIntegrityViolationException`() {
+    fun `unique constraint on (portfolio_id, symbol) raises DataIntegrityViolationException`() {
         val p = newPortfolio()
-        newHolding(p, "AAPL", BigDecimal("1"))
+        addHolding(p, "TSLA")
 
-        assertThrows<DataIntegrityViolationException> {
-            holdingRepository.saveAndFlush(
-                HoldingEntity(
-                    portfolio = p,
-                    symbol = "AAPL",
-                    quantity = BigDecimal("2"),
-                    avgCost = BigDecimal("20.00"),
-                ),
-            )
-        }
+        assertThatThrownBy {
+            addHolding(p, "TSLA") // same portfolio + symbol should violate uq_holdings_portfolio_symbol
+        }.isInstanceOf(DataIntegrityViolationException::class.java)
     }
 }
