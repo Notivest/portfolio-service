@@ -8,8 +8,29 @@ import org.springframework.data.domain.Pageable
 import java.util.UUID
 
 interface HoldingService {
-    fun list(userId: UUID, portfolioId: UUID, symbolFilter: String?, pageable: Pageable): Page<HoldingResponse>
-    fun create(userId: UUID, portfolioId: UUID, req: HoldingCreateRequest): HoldingResponse
-    fun update(userId: UUID, portfolioId: UUID, holdingId: UUID, req: HoldingUpdateRequest): HoldingResponse
-    fun delete(userId: UUID, portfolioId: UUID, holdingId: UUID)
+    fun list(
+        userId: UUID,
+        portfolioId: UUID,
+        symbolFilter: String?,
+        pageable: Pageable,
+    ): Page<HoldingResponse>
+
+    fun create(
+        userId: UUID,
+        portfolioId: UUID,
+        req: HoldingCreateRequest,
+    ): HoldingResponse
+
+    fun update(
+        userId: UUID,
+        portfolioId: UUID,
+        holdingId: UUID,
+        req: HoldingUpdateRequest,
+    ): HoldingResponse
+
+    fun delete(
+        userId: UUID,
+        portfolioId: UUID,
+        holdingId: UUID,
+    )
 }

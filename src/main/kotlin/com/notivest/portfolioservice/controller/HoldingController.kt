@@ -32,13 +32,12 @@ class HoldingController(
     private val service: HoldingService,
     private val userIdResolver: JwtUserIdResolver,
 ) {
-
     @GetMapping
     fun list(
         @PathVariable portfolioId: UUID,
         @RequestParam(name = "q", required = false) q: String?,
         @AuthenticationPrincipal jwt: Jwt,
-        @PageableDefault(size = 20) pageable: Pageable
+        @PageableDefault(size = 20) pageable: Pageable,
     ): Page<HoldingResponse> {
         val userId = userIdResolver.requireUserId(jwt)
         return service.list(userId, portfolioId, q, pageable)
@@ -48,12 +47,12 @@ class HoldingController(
     fun create(
         @PathVariable portfolioId: UUID,
         @Valid @RequestBody body: HoldingCreateRequest,
-        @AuthenticationPrincipal jwt: Jwt
+        @AuthenticationPrincipal jwt: Jwt,
     ): ResponseEntity<HoldingResponse> {
         val userId = userIdResolver.requireUserId(jwt)
         val created = service.create(userId, portfolioId, body)
         return ResponseEntity.created(
-            URI.create("/portfolios/$portfolioId/holdings/${created.id}")
+            URI.create("/portfolios/$portfolioId/holdings/${created.id}"),
         ).body(created)
     }
 
@@ -62,7 +61,7 @@ class HoldingController(
         @PathVariable portfolioId: UUID,
         @PathVariable holdingId: UUID,
         @Valid @RequestBody body: HoldingUpdateRequest,
-        @AuthenticationPrincipal jwt: Jwt
+        @AuthenticationPrincipal jwt: Jwt,
     ): HoldingResponse {
         val userId = userIdResolver.requireUserId(jwt)
         return service.update(userId, portfolioId, holdingId, body)
@@ -73,10 +72,9 @@ class HoldingController(
     fun delete(
         @PathVariable portfolioId: UUID,
         @PathVariable holdingId: UUID,
-        @AuthenticationPrincipal jwt: Jwt
+        @AuthenticationPrincipal jwt: Jwt,
     ) {
         val userId = userIdResolver.requireUserId(jwt)
         service.delete(userId, portfolioId, holdingId)
     }
-
 }

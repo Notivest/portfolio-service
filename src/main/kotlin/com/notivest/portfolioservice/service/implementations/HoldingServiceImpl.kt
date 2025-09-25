@@ -23,8 +23,7 @@ import java.util.UUID
 class HoldingServiceImpl(
     private val repo: HoldingRepository,
     private val portfolioRepo: PortfolioRepository,
-) : HoldingService{
-
+) : HoldingService {
     @Transactional(readOnly = true)
     override fun list(
         userId: UUID,
@@ -34,13 +33,16 @@ class HoldingServiceImpl(
     ): Page<HoldingResponse> {
         requirePortfolioOwned(userId, portfolioId)
 
-        val page = if (symbolFilter.isNullOrBlank()) {
-            repo.findAllByPortfolioId(portfolioId, pageable)
-        } else {
-            repo.findAllByPortfolioIdAndSymbolContainingIgnoreCase(
-                portfolioId, symbolFilter.trim(), pageable
-            )
-        }
+        val page =
+            if (symbolFilter.isNullOrBlank()) {
+                repo.findAllByPortfolioId(portfolioId, pageable)
+            } else {
+                repo.findAllByPortfolioIdAndSymbolContainingIgnoreCase(
+                    portfolioId,
+                    symbolFilter.trim(),
+                    pageable,
+                )
+            }
         return page.map { it.toResponse() }
     }
 
@@ -54,10 +56,11 @@ class HoldingServiceImpl(
         // normalización de símbolo
         val normalized = req.copy(symbol = req.symbol.trim().uppercase(Locale.US))
 
-        val entity = normalized.toEntity(portfolio).also {
-            // por si acaso, aseguramos uppercase
-            it.symbol = it.symbol.uppercase(Locale.US)
-        }
+        val entity =
+            normalized.toEntity(portfolio).also {
+                // por si acaso, aseguramos uppercase
+                it.symbol = it.symbol.uppercase(Locale.US)
+            }
 
         try {
             val saved = repo.saveAndFlush(entity)
@@ -65,7 +68,8 @@ class HoldingServiceImpl(
         } catch (ex: DataIntegrityViolationException) {
             // Mapeamos la violación de UNIQUE (portfolio_id, symbol) a 409
             throw ResponseStatusException(HttpStatus.CONFLICT, "Holding for symbol already exists in this portfolio" + ex.message)
-        }    }
+        }
+    }
 
     override fun update(
         userId: UUID,
@@ -75,8 +79,9 @@ class HoldingServiceImpl(
     ): HoldingResponse {
         requirePortfolioOwned(userId, portfolioId)
 
-        val entity = repo.findByIdAndPortfolioId(holdingId, portfolioId)
-            .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Holding not found") }
+        val entity =
+            repo.findByIdAndPortfolioId(holdingId, portfolioId)
+                .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Holding not found") }
 
         // apply only non-null fields
         req.applyTo(entity)
@@ -85,16 +90,23 @@ class HoldingServiceImpl(
         return saved.toResponse()
     }
 
-    override fun delete(userId: UUID, portfolioId: UUID, holdingId: UUID) {
+    override fun delete(
+        userId: UUID,
+        portfolioId: UUID,
+        holdingId: UUID,
+    ) {
         requirePortfolioOwned(userId, portfolioId)
 
-        val entity = repo.findByIdAndPortfolioId(holdingId, portfolioId)
-            .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Holding not found") }
+        val entity =
+            repo.findByIdAndPortfolioId(holdingId, portfolioId)
+                .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Holding not found") }
 
         repo.delete(entity)
     }
 
-    private fun requirePortfolioOwned(userId: UUID, portfolioId: UUID) =
-        portfolioRepo.findByIdAndUserIdAndDeletedAtIsNull(portfolioId, userId)
-            .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Portfolio not found") }
+    private fun requirePortfolioOwned(
+        userId: UUID,
+        portfolioId: UUID,
+    ) = portfolioRepo.findByIdAndUserIdAndDeletedAtIsNull(portfolioId, userId)
+        .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Portfolio not found") }
 }

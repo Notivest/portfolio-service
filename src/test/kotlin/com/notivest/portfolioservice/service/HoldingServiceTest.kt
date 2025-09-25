@@ -10,10 +10,8 @@ import com.notivest.portfolioservice.service.implementations.HoldingServiceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
-import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
@@ -23,17 +21,17 @@ import java.time.Instant
 import java.util.*
 
 class HoldingServiceTest {
-
-
     private val holdingRepo: HoldingRepository = mock(HoldingRepository::class.java)
     private val portfolioRepo: PortfolioRepository = mock(PortfolioRepository::class.java)
     private val service = HoldingServiceImpl(holdingRepo, portfolioRepo)
 
-    private fun portfolio(userId: UUID, id: UUID = UUID.randomUUID()) =
-        PortfolioEntity(id = id, userId = userId, name = "Main", baseCurrency = "USD").apply {
-            createdAt = Instant.parse("2025-01-01T00:00:00Z")
-            updatedAt = Instant.parse("2025-01-01T00:00:00Z")
-        }
+    private fun portfolio(
+        userId: UUID,
+        id: UUID = UUID.randomUUID(),
+    ) = PortfolioEntity(id = id, userId = userId, name = "Main", baseCurrency = "USD").apply {
+        createdAt = Instant.parse("2025-01-01T00:00:00Z")
+        updatedAt = Instant.parse("2025-01-01T00:00:00Z")
+    }
 
     @Test
     fun `create uppercases symbol and returns response`() {
@@ -78,12 +76,18 @@ class HoldingServiceTest {
         `when`(portfolioRepo.findByIdAndUserIdAndDeletedAtIsNull(p.id!!, userId))
             .thenReturn(Optional.of(p))
 
-        val h1 = HoldingEntity(portfolio = p, symbol = "AAPL").apply {
-            id = UUID.randomUUID(); createdAt = Instant.now(); updatedAt = Instant.now()
-        }
-        val h2 = HoldingEntity(portfolio= p, symbol= "MSFT").apply {
-            id = UUID.randomUUID(); createdAt = Instant.now(); updatedAt = Instant.now()
-        }
+        val h1 =
+            HoldingEntity(portfolio = p, symbol = "AAPL").apply {
+                id = UUID.randomUUID()
+                createdAt = Instant.now()
+                updatedAt = Instant.now()
+            }
+        val h2 =
+            HoldingEntity(portfolio = p, symbol = "MSFT").apply {
+                id = UUID.randomUUID()
+                createdAt = Instant.now()
+                updatedAt = Instant.now()
+            }
 
         `when`(holdingRepo.findAllByPortfolioId(p.id!!, PageRequest.of(0, 10)))
             .thenReturn(PageImpl(listOf(h1, h2)))
@@ -100,9 +104,12 @@ class HoldingServiceTest {
         `when`(portfolioRepo.findByIdAndUserIdAndDeletedAtIsNull(p.id!!, userId))
             .thenReturn(Optional.of(p))
 
-        val h1 = HoldingEntity(portfolio = p, symbol= "AAPL").apply {
-            id = UUID.randomUUID(); createdAt = Instant.now(); updatedAt = Instant.now()
-        }
+        val h1 =
+            HoldingEntity(portfolio = p, symbol = "AAPL").apply {
+                id = UUID.randomUUID()
+                createdAt = Instant.now()
+                updatedAt = Instant.now()
+            }
         `when`(holdingRepo.findAllByPortfolioIdAndSymbolContainingIgnoreCase(p.id!!, "aap", PageRequest.of(0, 10)))
             .thenReturn(PageImpl(listOf(h1)))
 
@@ -118,22 +125,29 @@ class HoldingServiceTest {
         `when`(portfolioRepo.findByIdAndUserIdAndDeletedAtIsNull(p.id!!, userId))
             .thenReturn(Optional.of(p))
 
-        val e = HoldingEntity(portfolio =p, symbol = "TSLA",
-            quantity = BigDecimal("2"),
-            avgCost = BigDecimal("100.00"),
-            note = "Init"
-        ).apply {
-            id = UUID.randomUUID()
-            createdAt = Instant.now(); updatedAt = Instant.now()
-        }
+        val e =
+            HoldingEntity(
+                portfolio = p,
+                symbol = "TSLA",
+                quantity = BigDecimal("2"),
+                avgCost = BigDecimal("100.00"),
+                note = "Init",
+            ).apply {
+                id = UUID.randomUUID()
+                createdAt = Instant.now()
+                updatedAt = Instant.now()
+            }
         `when`(holdingRepo.findByIdAndPortfolioId(e.id!!, p.id!!))
             .thenReturn(Optional.of(e))
         `when`(holdingRepo.saveAndFlush(any(HoldingEntity::class.java))).thenAnswer { it.arguments[0] }
 
-        val out = service.update(
-            userId, p.id!!, e.id!!,
-            HoldingUpdateRequest(quantity = BigDecimal("3.5"), avgCost = null, note = "Updated")
-        )
+        val out =
+            service.update(
+                userId,
+                p.id!!,
+                e.id!!,
+                HoldingUpdateRequest(quantity = BigDecimal("3.5"), avgCost = null, note = "Updated"),
+            )
 
         assertThat(out.symbol).isEqualTo("TSLA")
         assertThat(out.quantity).isEqualByComparingTo("3.5")
@@ -147,9 +161,12 @@ class HoldingServiceTest {
         `when`(portfolioRepo.findByIdAndUserIdAndDeletedAtIsNull(p.id!!, userId))
             .thenReturn(Optional.of(p))
 
-        val e = HoldingEntity(portfolio=p, symbol = "NVDA").apply {
-            id = UUID.randomUUID(); createdAt = Instant.now(); updatedAt = Instant.now()
-        }
+        val e =
+            HoldingEntity(portfolio = p, symbol = "NVDA").apply {
+                id = UUID.randomUUID()
+                createdAt = Instant.now()
+                updatedAt = Instant.now()
+            }
         `when`(holdingRepo.findByIdAndPortfolioId(e.id!!, p.id!!))
             .thenReturn(Optional.of(e))
 

@@ -12,21 +12,18 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
-import org.springframework.data.domain.Page
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.verify
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
-import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 import java.util.*
 
 class PortfolioServiceTest {
-
-
     @MockK
     lateinit var portfolioRepository: PortfolioRepository
 
@@ -46,13 +43,13 @@ class PortfolioServiceTest {
     // ---------- Helpers ----------
     private fun entity(
         id: UUID = UUID.randomUUID(),
-        deleted: Boolean = false
+        deleted: Boolean = false,
     ) = PortfolioEntity(
         id = id,
         userId = userId,
         name = "Main",
         baseCurrency = "USD",
-        status = PortfolioStatus.ACTIVE
+        status = PortfolioStatus.ACTIVE,
     ).apply {
         createdAt = now
         updatedAt = now
@@ -105,12 +102,13 @@ class PortfolioServiceTest {
     fun `create saves entity and returns response with id and audit fields`() {
         val req = PortfolioCreateRequest(name = "New P", baseCurrency = "ARS")
 
-        val saved = entity().apply {
-            name = "New P"
-            baseCurrency = "ARS"
-        }
+        val saved =
+            entity().apply {
+                name = "New P"
+                baseCurrency = "ARS"
+            }
 
-        every { portfolioRepository.save(any<PortfolioEntity>()) } returns saved
+        every { portfolioRepository.saveAndFlush(any<PortfolioEntity>()) } returns saved
 
         val out = service.create(userId, req)
 
@@ -118,23 +116,25 @@ class PortfolioServiceTest {
         assertThat(out.name).isEqualTo("New P")
         assertThat(out.baseCurrency).isEqualTo("ARS")
         assertThat(out.userId).isEqualTo(userId)
-        verify(exactly = 1) { portfolioRepository.save(any<PortfolioEntity>()) }
+        verify(exactly = 1) { portfolioRepository.saveAndFlush(any<PortfolioEntity>()) }
     }
 
     @Test
     fun `update applies only provided fields and returns updated response`() {
         val id = UUID.randomUUID()
-        val existing = entity(id).apply {
-            name = "Old"
-            baseCurrency = "USD"
-        }
+        val existing =
+            entity(id).apply {
+                name = "Old"
+                baseCurrency = "USD"
+            }
 
         every { portfolioRepository.findByIdAndUserIdAndDeletedAtIsNull(id, userId) } returns Optional.of(existing)
-        every { portfolioRepository.save(existing) } returns existing.apply {
-            name = "New"
-            // baseCurrency unchanged
-            updatedAt = now.plusSeconds(60)
-        }
+        every { portfolioRepository.saveAndFlush(existing) } returns
+            existing.apply {
+                name = "New"
+                // baseCurrency unchanged
+                updatedAt = now.plusSeconds(60)
+            }
 
         val out = service.update(userId, id, PortfolioUpdateRequest(name = "New", baseCurrency = null))
 
@@ -142,7 +142,7 @@ class PortfolioServiceTest {
         assertThat(out.name).isEqualTo("New")
         assertThat(out.baseCurrency).isEqualTo("USD")
         verify { portfolioRepository.findByIdAndUserIdAndDeletedAtIsNull(id, userId) }
-        verify { portfolioRepository.save(existing) }
+        verify { portfolioRepository.saveAndFlush(existing) }
     }
 
     @Test

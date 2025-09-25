@@ -15,9 +15,9 @@ import java.util.UUID
 @ActiveProfiles("test") // tu H2 + flyway
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class PortfolioServiceIT {
-
     @Autowired
     lateinit var service: PortfolioService
+
     @Autowired
     lateinit var portfolioRepository: PortfolioRepository
 

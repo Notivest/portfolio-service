@@ -52,6 +52,12 @@ class SecurityConfig(
         http.csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
+                it.requestMatchers(
+                    "/docs/**",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/openapi/**",
+                ).permitAll()
                 it.anyRequest().authenticated()
             }
             .oauth2ResourceServer { oauth2 ->

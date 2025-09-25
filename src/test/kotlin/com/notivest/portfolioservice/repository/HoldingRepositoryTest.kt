@@ -6,7 +6,6 @@ import com.notivest.portfolioservice.models.portfolio.PortfolioStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -20,8 +19,8 @@ import java.util.UUID
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class HoldingRepositoryTest {
-
     @Autowired lateinit var holdingRepository: HoldingRepository
+
     @Autowired lateinit var portfolioRepository: PortfolioRepository
 
     private fun newPortfolio(): PortfolioEntity =
@@ -31,7 +30,7 @@ class HoldingRepositoryTest {
                 name = "My Portfolio",
                 baseCurrency = "USD",
                 status = PortfolioStatus.ACTIVE,
-            )
+            ),
         )
 
     private fun addHolding(
@@ -48,7 +47,7 @@ class HoldingRepositoryTest {
                 quantity = quantity,
                 avgCost = avgCost,
                 note = note,
-            )
+            ),
         )
 
     @Test
@@ -72,9 +71,12 @@ class HoldingRepositoryTest {
         addHolding(p, "MSFT")
         addHolding(p, "AAPD")
 
-        val page = holdingRepository.findAllByPortfolioIdAndSymbolContainingIgnoreCase(
-            p.id!!, "aap", PageRequest.of(0, 10)
-        )
+        val page =
+            holdingRepository.findAllByPortfolioIdAndSymbolContainingIgnoreCase(
+                p.id!!,
+                "aap",
+                PageRequest.of(0, 10),
+            )
 
         assertThat(page.totalElements).isEqualTo(2)
         assertThat(page.content.map { it.symbol }).containsExactlyInAnyOrder("AAPL", "AAPD")
