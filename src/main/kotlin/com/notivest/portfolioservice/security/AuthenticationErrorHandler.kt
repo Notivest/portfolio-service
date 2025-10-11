@@ -27,7 +27,7 @@ class AuthenticationErrorHandler(
 
         val errorResponse = createErrorResponse(authException)
 
-        // Log del error para debugging
+        // Log error for debugging
         logger.warn("Authentication failed: ${errorResponse.message}", authException)
 
         response.writer.write(objectMapper.writeValueAsString(errorResponse))
@@ -41,20 +41,20 @@ class AuthenticationErrorHandler(
                     ex.error.errorCode == "invalid_token" ->
                         ErrorResponse(
                             error = "invalid_token",
-                            message = "El token JWT proporcionado es inválido",
-                            details = "Verifica que el token esté bien formado y no haya expirado",
+                            message = "The provided JWT is invalid",
+                            details = "Make sure the token is well-formed and not expired",
                         )
                     ex.error.errorCode == "insufficient_scope" ->
                         ErrorResponse(
                             error = "insufficient_scope",
-                            message = "El token no tiene los permisos necesarios",
-                            details = "Se requieren permisos adicionales para acceder a este recurso",
+                            message = "The token lacks the required permissions",
+                            details = "Additional permissions are required to access this resource",
                         )
                     else ->
                         ErrorResponse(
                             error = "authentication_failed",
-                            message = "Error de autenticación OAuth2",
-                            details = ex.error.description ?: "Token inválido o expirado",
+                            message = "OAuth2 authentication error",
+                            details = ex.error.description ?: "Invalid or expired token",
                         )
                 }
             }
@@ -64,20 +64,20 @@ class AuthenticationErrorHandler(
                     ex.message?.contains("JWT") == true ->
                         ErrorResponse(
                             error = "jwt_error",
-                            message = "Error procesando el token JWT",
-                            details = "Token malformado, expirado o inválido",
+                            message = "Error processing the JWT token",
+                            details = "Malformed, expired, or invalid token",
                         )
                     ex.message?.contains("Bearer") == true ->
                         ErrorResponse(
                             error = "missing_token",
-                            message = "Token de autorización requerido",
-                            details = "Incluye el header 'Authorization: Bearer <token>'",
+                            message = "Authorization token required",
+                            details = "Include the header 'Authorization: Bearer <token>'",
                         )
                     else ->
                         ErrorResponse(
                             error = "unauthorized",
-                            message = "Acceso no autorizado",
-                            details = "Se requiere autenticación válida para acceder a este recurso",
+                            message = "Unauthorized access",
+                            details = "Valid authentication is required to access this resource",
                         )
                 }
             }
