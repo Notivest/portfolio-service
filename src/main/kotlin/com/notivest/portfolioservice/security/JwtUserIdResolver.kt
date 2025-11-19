@@ -12,8 +12,7 @@ class JwtUserIdResolver(
     @Value("\${JWT_USER_ID_CLAIM:claim}")
     private val userIdClaim: String,
 ) {
-    fun requireUserId(jwt: Jwt): UUID =
-        extractUserId(jwt) ?: throw InvalidUserIdException("JWT missing user identifier")
+    fun requireUserId(jwt: Jwt): UUID = extractUserId(jwt) ?: throw InvalidUserIdException("JWT missing user identifier")
 
     fun extractUserId(jwt: Jwt): UUID? {
         // 1) Claim principal (puede ser UUID o un sub tipo "auth0|...")
@@ -32,9 +31,7 @@ class JwtUserIdResolver(
         return null
     }
 
-    private fun parseUuidOrNull(s: String?): UUID? =
-        runCatching { if (!s.isNullOrBlank()) UUID.fromString(s) else null }.getOrNull()
+    private fun parseUuidOrNull(s: String?): UUID? = runCatching { if (!s.isNullOrBlank()) UUID.fromString(s) else null }.getOrNull()
 
-    private fun stableUuidFrom(value: String): UUID =
-        UUID.nameUUIDFromBytes(("notivest:$value").toByteArray(StandardCharsets.UTF_8))
+    private fun stableUuidFrom(value: String): UUID = UUID.nameUUIDFromBytes(("notivest:$value").toByteArray(StandardCharsets.UTF_8))
 }
