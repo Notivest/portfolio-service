@@ -22,14 +22,10 @@ class InternalHoldingsController(
     fun search(
         @Valid @RequestBody body: SearchHoldingsRequest,
     ): ResponseEntity<*> {
-        try{
-            val requestUserId =
-                body.userId ?: throw ConstraintViolationException("userId must be provided", emptySet())
+        val requestUserId =
+            body.userId ?: throw ConstraintViolationException("userId must be provided", emptySet())
 
-            val holdings = userHoldingsSearchService.search(requestUserId, body.symbols)
-            return ResponseEntity.ok(holdings)
-        } catch (e : Exception) {
-            return ResponseEntity.badRequest().body(e.message)
-        }
+        val holdings = userHoldingsSearchService.search(requestUserId, body.symbols)
+        return ResponseEntity.ok(holdings)
     }
 }
