@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 
 @ControllerAdvice
@@ -80,4 +81,21 @@ class ApiExceptionHandler {
                 path = req.requestURI,
             ),
         )
+
+    @ExceptionHandler(ResponseStatusException::class)
+    fun handleResponseStatus(
+        ex: ResponseStatusException,
+        req: HttpServletRequest,
+    ): ResponseEntity<ErrorBody> {
+        val statusCode = ex.statusCode.value()
+        val error = HttpStatus.resolve(statusCode)?.reasonPhrase ?: "HTTP $statusCode"
+        return ResponseEntity.status(statusCode).body(
+            ErrorBody(
+                status = statusCode,
+                error = error,
+                message = ex.reason,
+                path = req.requestURI,
+            ),
+        )
+    }
 }

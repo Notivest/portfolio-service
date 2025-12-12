@@ -58,7 +58,10 @@ class SecurityConfig(
                     "/v3/api-docs/**",
                     "/openapi/**",
                 ).permitAll()
-                it.requestMatchers("/internal/v1/holdings/search")
+                it.requestMatchers(
+                    "/internal/v1/holdings/search",
+                    "/internal/v1/portfolios",
+                )
                     .hasAuthority("SCOPE_portfolio:read:user-context")
                 it.anyRequest().authenticated()
             }

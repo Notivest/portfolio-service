@@ -7,6 +7,7 @@ import com.notivest.portfolioservice.service.interfaces.UserHoldingsSearchServic
 import jakarta.validation.ConstraintViolationException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
 import java.util.Locale
 import java.util.UUID
 
@@ -56,12 +57,23 @@ class UserHoldingsSearchServiceImpl(
                 holding.updatedAt
                     ?: throw IllegalStateException("Holding ${holding.id} is missing updatedAt")
 
+            val quantity = holding.quantity
+            val avgCost = holding.avgCost
+            val marketValue =
+                if (quantity != null && avgCost != null) {
+                    quantity * avgCost
+                } else {
+                    BigDecimal.ZERO
+                }
+
             HoldingSearchResponse(
                 portfolioId = portfolioId,
                 portfolioName = portfolio.name,
                 symbol = holding.symbol.uppercase(Locale.US),
                 quantity = holding.quantity,
                 avgCost = holding.avgCost,
+                asOf = updatedAt,
+                marketValue = marketValue,
                 updatedAt = updatedAt,
             )
         }

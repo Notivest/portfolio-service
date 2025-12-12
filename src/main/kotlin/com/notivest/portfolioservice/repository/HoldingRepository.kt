@@ -27,6 +27,21 @@ interface HoldingRepository : JpaRepository<HoldingEntity, UUID> {
         portfolioId: UUID,
     ): Optional<HoldingEntity>
 
+    fun findByPortfolioIdAndSymbolIgnoreCase(
+        portfolioId: UUID,
+        symbol: String,
+    ): Optional<HoldingEntity>
+
+    @Query(
+        """
+        select h from HoldingEntity h
+        join fetch h.portfolio p
+        where p.userId = :userId
+          and p.deletedAt is null
+        """,
+    )
+    fun findByUserId(userId: UUID): List<HoldingEntity>
+
     @Query("select distinct h.symbol from HoldingEntity h where h.portfolio.id = :portfolioId")
     fun symbolsByPortfolioId(portfolioId: UUID): Set<String>
 

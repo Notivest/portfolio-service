@@ -3,6 +3,7 @@ package com.notivest.portfolioservice.service
 import com.notivest.portfolioservice.dto.portfolio.request.PortfolioCreateRequest
 import com.notivest.portfolioservice.dto.portfolio.request.PortfolioUpdateRequest
 import com.notivest.portfolioservice.dto.portfolio.response.PortfolioResponse
+import com.notivest.portfolioservice.exception.NotFoundException
 import com.notivest.portfolioservice.models.portfolio.PortfolioEntity
 import com.notivest.portfolioservice.models.portfolio.PortfolioStatus
 import com.notivest.portfolioservice.repository.PortfolioRepository
@@ -93,7 +94,8 @@ class PortfolioServiceTest {
         val id = UUID.randomUUID()
         every { portfolioRepository.findByIdAndUserIdAndDeletedAtIsNull(id, userId) } returns Optional.empty()
 
-        val ex = assertThrows<RuntimeException> { service.get(userId, id) }
+        val ex = assertThrows<NotFoundException> { service.get(userId, id) }
+        assertThat(ex.message).isEqualTo("Portfolio not found")
 
         verify(exactly = 1) { portfolioRepository.findByIdAndUserIdAndDeletedAtIsNull(id, userId) }
     }

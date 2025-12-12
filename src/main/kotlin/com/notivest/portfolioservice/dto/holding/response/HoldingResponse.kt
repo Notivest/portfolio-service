@@ -10,6 +10,9 @@ data class HoldingResponse(
     val symbol: String,
     val quantity: BigDecimal?,
     val avgCost: BigDecimal?,
+    val asOf: Instant,
+    val marketValue: BigDecimal,
+    val note: String? = null,
     val createdAt: Instant,
     val updatedAt: Instant,
 )

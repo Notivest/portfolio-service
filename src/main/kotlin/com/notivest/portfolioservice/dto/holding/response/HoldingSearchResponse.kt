@@ -10,5 +10,7 @@ data class HoldingSearchResponse(
     val symbol: String,
     val quantity: BigDecimal?,
     val avgCost: BigDecimal?,
+    val asOf: Instant,
+    val marketValue: BigDecimal,
     val updatedAt: Instant,
 )

@@ -35,7 +35,7 @@ class PortfolioServiceImpl(
         id: UUID,
     ): PortfolioResponse {
         return portfolioRepository.findByIdAndUserIdAndDeletedAtIsNull(id, userId)
-            .orElseThrow { NoSuchElementException("Portfolio not found") }
+            .orElseThrow { NotFoundException("Portfolio not found") }
             .toResponse()
     }
 

@@ -2,7 +2,9 @@ package com.notivest.portfolioservice.dto.portfolio
 
 import com.notivest.portfolioservice.dto.portfolio.request.PortfolioCreateRequest
 import com.notivest.portfolioservice.dto.portfolio.request.PortfolioUpdateRequest
+import com.notivest.portfolioservice.dto.portfolio.response.PortfolioHoldingResponse
 import com.notivest.portfolioservice.dto.portfolio.response.PortfolioResponse
+import com.notivest.portfolioservice.dto.portfolio.response.PortfolioWithHoldingsResponse
 import com.notivest.portfolioservice.models.portfolio.PortfolioEntity
 import java.util.UUID
 
@@ -15,6 +17,14 @@ fun PortfolioEntity.toResponse(): PortfolioResponse =
         status = status,
         createdAt = requireNotNull(createdAt) { "PortfolioEntity.createdAt must not be null" },
         updatedAt = requireNotNull(updatedAt) { "PortfolioEntity.updatedAt must not be null" },
+    )
+
+fun PortfolioEntity.toResponseWithHoldings(holdings: List<PortfolioHoldingResponse>?): PortfolioWithHoldingsResponse =
+    PortfolioWithHoldingsResponse(
+        id = requireNotNull(id) { "PortfolioEntity.id must not be null" },
+        name = name,
+        baseCurrency = baseCurrency,
+        holdings = holdings,
     )
 
 /** Create DTO -> New Entity (userId provided by caller; no repo access) */

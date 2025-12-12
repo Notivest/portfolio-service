@@ -1,8 +1,11 @@
 package com.notivest.portfolioservice.controller
 
 import com.notivest.portfolioservice.dto.holding.request.HoldingCreateRequest
+import com.notivest.portfolioservice.dto.holding.request.HoldingBuyRequest
+import com.notivest.portfolioservice.dto.holding.request.HoldingSellRequest
 import com.notivest.portfolioservice.dto.holding.request.HoldingUpdateRequest
 import com.notivest.portfolioservice.dto.holding.response.HoldingResponse
+import com.notivest.portfolioservice.dto.holding.response.HoldingSummaryResponse
 import com.notivest.portfolioservice.security.JwtUserIdResolver
 import com.notivest.portfolioservice.service.interfaces.HoldingService
 import jakarta.validation.Valid
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
 import java.net.URI
 import java.util.UUID
 
@@ -43,6 +47,25 @@ class HoldingController(
         return service.list(userId, portfolioId, q, pageable)
     }
 
+    @GetMapping("/summary")
+    fun getSummary(
+        @PathVariable portfolioId: UUID,
+        @RequestParam(defaultValue = "10") limit: Int,
+        @RequestParam(defaultValue = "marketValue,desc") sort: String,
+        @AuthenticationPrincipal jwt: Jwt,
+    ): List<HoldingSummaryResponse> {
+        val userId = userIdResolver.requireUserId(jwt)
+
+        if (limit < 1 || limit > 50) {
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "limit must be between 1 and 50",
+            )
+        }
+
+        return service.getSummary(userId, portfolioId, limit, sort)
+    }
+
     @PostMapping
     fun create(
         @PathVariable portfolioId: UUID,
@@ -54,6 +77,26 @@ class HoldingController(
         return ResponseEntity.created(
             URI.create("/portfolios/$portfolioId/holdings/${created.id}"),
         ).body(created)
+    }
+
+    @PostMapping("/buy")
+    fun buy(
+        @PathVariable portfolioId: UUID,
+        @Valid @RequestBody body: HoldingBuyRequest,
+        @AuthenticationPrincipal jwt: Jwt,
+    ): HoldingResponse {
+        val userId = userIdResolver.requireUserId(jwt)
+        return service.buy(userId, portfolioId, body)
+    }
+
+    @PostMapping("/sell")
+    fun sell(
+        @PathVariable portfolioId: UUID,
+        @Valid @RequestBody body: HoldingSellRequest,
+        @AuthenticationPrincipal jwt: Jwt,
+    ): HoldingResponse {
+        val userId = userIdResolver.requireUserId(jwt)
+        return service.sell(userId, portfolioId, body)
     }
 
     @PatchMapping("/{holdingId}")

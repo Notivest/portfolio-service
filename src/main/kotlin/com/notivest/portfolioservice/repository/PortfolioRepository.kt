@@ -15,6 +15,8 @@ interface PortfolioRepository : JpaRepository<PortfolioEntity, UUID> {
         pageable: Pageable,
     ): Page<PortfolioEntity>
 
+    fun findAllByUserIdAndDeletedAtIsNull(userId: UUID): List<PortfolioEntity>
+
     fun findByIdAndUserIdAndDeletedAtIsNull(
         id: UUID,
         userId: UUID,

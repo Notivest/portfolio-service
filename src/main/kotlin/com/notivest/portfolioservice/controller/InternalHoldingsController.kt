@@ -1,7 +1,6 @@
 package com.notivest.portfolioservice.controller
 
 import com.notivest.portfolioservice.dto.holding.request.SearchHoldingsRequest
-import com.notivest.portfolioservice.dto.holding.response.HoldingSearchResponse
 import com.notivest.portfolioservice.service.interfaces.UserHoldingsSearchService
 import jakarta.validation.ConstraintViolationException
 import jakarta.validation.Valid
