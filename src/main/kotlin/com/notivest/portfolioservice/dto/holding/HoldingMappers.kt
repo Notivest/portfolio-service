@@ -33,12 +33,24 @@ fun HoldingEntity.toResponse(): HoldingResponse {
 }
 
 fun HoldingEntity.toPortfolioHoldingResponse(): PortfolioHoldingResponse =
-    PortfolioHoldingResponse(
-        symbol = symbol,
-        quantity = quantity,
-        avgCost = avgCost,
-        marketValue = null,
-    )
+    run {
+        val qty = quantity
+        val cost = avgCost
+        val marketValue =
+            if (qty != null && cost != null) {
+                qty * cost
+            } else {
+                BigDecimal.ZERO
+            }
+
+        PortfolioHoldingResponse(
+            symbol = symbol,
+            quantity = qty,
+            avgCost = cost,
+            marketValue = marketValue,
+            asOf = requireNotNull(updatedAt) { "HoldingEntity.updatedAt must not be null" },
+        )
+    }
 
 /** Create DTO -> New Entity (portfolio supplied by caller; no repo access) */
 fun HoldingCreateRequest.toEntity(portfolio: PortfolioEntity): HoldingEntity =
