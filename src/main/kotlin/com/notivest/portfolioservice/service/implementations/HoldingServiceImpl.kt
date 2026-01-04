@@ -11,8 +11,8 @@ import com.notivest.portfolioservice.dto.holding.toEntity
 import com.notivest.portfolioservice.dto.holding.toResponse
 import com.notivest.portfolioservice.models.HoldingMovementEntity
 import com.notivest.portfolioservice.models.HoldingMovementType
-import com.notivest.portfolioservice.repository.HoldingRepository
 import com.notivest.portfolioservice.repository.HoldingMovementRepository
+import com.notivest.portfolioservice.repository.HoldingRepository
 import com.notivest.portfolioservice.repository.PortfolioRepository
 import com.notivest.portfolioservice.service.interfaces.HoldingService
 import org.springframework.dao.DataIntegrityViolationException
@@ -329,6 +329,5 @@ class HoldingServiceImpl(
     ) = portfolioRepo.findByIdAndUserIdAndDeletedAtIsNull(portfolioId, userId)
         .orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND, "Portfolio not found") }
 
-    private fun normalizeSymbol(symbol: String): String =
-        symbol.trim().uppercase(Locale.US)
+    private fun normalizeSymbol(symbol: String): String = symbol.trim().uppercase(Locale.US)
 }

@@ -1,15 +1,14 @@
 package com.notivest.portfolioservice.service
 
-import com.notivest.portfolioservice.dto.holding.request.HoldingCreateRequest
 import com.notivest.portfolioservice.dto.holding.request.HoldingBuyRequest
+import com.notivest.portfolioservice.dto.holding.request.HoldingCreateRequest
 import com.notivest.portfolioservice.dto.holding.request.HoldingSellRequest
 import com.notivest.portfolioservice.dto.holding.request.HoldingUpdateRequest
 import com.notivest.portfolioservice.models.HoldingEntity
 import com.notivest.portfolioservice.models.HoldingMovementEntity
-import com.notivest.portfolioservice.models.HoldingMovementType
 import com.notivest.portfolioservice.models.portfolio.PortfolioEntity
-import com.notivest.portfolioservice.repository.HoldingRepository
 import com.notivest.portfolioservice.repository.HoldingMovementRepository
+import com.notivest.portfolioservice.repository.HoldingRepository
 import com.notivest.portfolioservice.repository.PortfolioRepository
 import com.notivest.portfolioservice.service.implementations.HoldingServiceImpl
 import org.assertj.core.api.Assertions.assertThat
@@ -19,8 +18,8 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.web.server.ResponseStatusException
 import java.math.BigDecimal
 import java.time.Instant

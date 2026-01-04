@@ -20,4 +20,3 @@ interface HoldingMovementRepository : JpaRepository<HoldingMovementEntity, UUID>
         pageable: Pageable,
     ): Page<HoldingMovementEntity>
 }
-

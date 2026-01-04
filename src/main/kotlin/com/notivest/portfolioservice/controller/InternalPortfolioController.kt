@@ -1,7 +1,7 @@
 package com.notivest.portfolioservice.controller
 
-import com.notivest.portfolioservice.dto.portfolio.response.PortfolioWithHoldingsResponse
 import com.notivest.portfolioservice.dto.holding.response.HoldingSummaryResponse
+import com.notivest.portfolioservice.dto.portfolio.response.PortfolioWithHoldingsResponse
 import com.notivest.portfolioservice.service.interfaces.HoldingService
 import com.notivest.portfolioservice.service.interfaces.InternalPortfolioService
 import org.springframework.context.annotation.Profile

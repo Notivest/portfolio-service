@@ -56,4 +56,3 @@ class HoldingMovementEntity(
     @Column(name = "executed_at", nullable = false, columnDefinition = "timestamptz")
     var executedAt: Instant? = null,
 )
-
