@@ -263,20 +263,20 @@ class HoldingServiceImpl(
             return emptyList()
         }
 
-        val totalMarketValue =
+        val totalBookValue =
             holdings.sumOf { holding ->
-                calculateMarketValue(holding.quantity, holding.avgCost)
+                calculateBookValue(holding.quantity, holding.avgCost)
             }
 
         val sorted =
             when (sort) {
-                "marketValue,desc" ->
+                "bookValue,desc" ->
                     holdings.sortedByDescending { holding ->
-                        calculateMarketValue(holding.quantity, holding.avgCost)
+                        calculateBookValue(holding.quantity, holding.avgCost)
                     }
-                "marketValue,asc" ->
+                "bookValue,asc" ->
                     holdings.sortedBy { holding ->
-                        calculateMarketValue(holding.quantity, holding.avgCost)
+                        calculateBookValue(holding.quantity, holding.avgCost)
                     }
                 "quantity,desc" -> holdings.sortedByDescending { it.quantity }
                 "quantity,asc" -> holdings.sortedBy { it.quantity }
@@ -284,18 +284,18 @@ class HoldingServiceImpl(
                 "symbol,desc" -> holdings.sortedByDescending { it.symbol }
                 else ->
                     holdings.sortedByDescending { holding ->
-                        calculateMarketValue(holding.quantity, holding.avgCost)
+                        calculateBookValue(holding.quantity, holding.avgCost)
                     }
             }
 
         return sorted
             .take(limit)
             .map { holding ->
-                val marketValue = calculateMarketValue(holding.quantity, holding.avgCost)
+                val bookValue = calculateBookValue(holding.quantity, holding.avgCost)
 
                 val weight =
-                    if (totalMarketValue > BigDecimal.ZERO) {
-                        marketValue.divide(totalMarketValue, 8, RoundingMode.HALF_UP)
+                    if (totalBookValue > BigDecimal.ZERO) {
+                        bookValue.divide(totalBookValue, 8, RoundingMode.HALF_UP)
                     } else {
                         BigDecimal.ZERO
                     }
@@ -305,14 +305,14 @@ class HoldingServiceImpl(
                     symbol = holding.symbol,
                     quantity = holding.quantity ?: BigDecimal.ZERO,
                     avgCost = holding.avgCost ?: BigDecimal.ZERO,
-                    marketValue = marketValue,
+                    bookValue = bookValue,
                     weight = weight,
                     asOf = requireNotNull(holding.updatedAt) { "HoldingEntity.updatedAt must not be null" },
                 )
             }
     }
 
-    private fun calculateMarketValue(
+    private fun calculateBookValue(
         quantity: BigDecimal?,
         avgCost: BigDecimal?,
     ): BigDecimal {

@@ -11,7 +11,7 @@ import java.math.BigDecimal
 fun HoldingEntity.toResponse(): HoldingResponse {
     val qty = quantity
     val cost = avgCost
-    val marketValue =
+    val bookValue =
         if (qty != null && cost != null) {
             qty * cost
         } else {
@@ -25,7 +25,7 @@ fun HoldingEntity.toResponse(): HoldingResponse {
         quantity = quantity,
         avgCost = avgCost,
         asOf = requireNotNull(updatedAt) { "HoldingEntity.updatedAt must not be null" },
-        marketValue = marketValue,
+        bookValue = bookValue,
         note = note,
         createdAt = requireNotNull(createdAt) { "HoldingEntity.createdAt must not be null" },
         updatedAt = requireNotNull(updatedAt) { "HoldingEntity.updatedAt must not be null" },
@@ -36,7 +36,7 @@ fun HoldingEntity.toPortfolioHoldingResponse(): PortfolioHoldingResponse =
     run {
         val qty = quantity
         val cost = avgCost
-        val marketValue =
+        val bookValue =
             if (qty != null && cost != null) {
                 qty * cost
             } else {
@@ -47,7 +47,7 @@ fun HoldingEntity.toPortfolioHoldingResponse(): PortfolioHoldingResponse =
             symbol = symbol,
             quantity = qty,
             avgCost = cost,
-            marketValue = marketValue,
+            bookValue = bookValue,
             asOf = requireNotNull(updatedAt) { "HoldingEntity.updatedAt must not be null" },
         )
     }

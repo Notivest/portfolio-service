@@ -36,7 +36,7 @@ class InternalPortfolioController(
         @PathVariable portfolioId: UUID,
         @RequestParam userId: UUID,
         @RequestParam(defaultValue = "10") limit: Int,
-        @RequestParam(defaultValue = "marketValue,desc") sort: String,
+        @RequestParam(defaultValue = "bookValue,desc") sort: String,
     ): ResponseEntity<List<HoldingSummaryResponse>> {
         if (limit < 1 || limit > 50) {
             throw ResponseStatusException(

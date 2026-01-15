@@ -284,7 +284,7 @@ class HoldingServiceTest {
     }
 
     @Test
-    fun `getSummary sorts by marketValue and rounds weights`() {
+    fun `getSummary sorts by bookValue and rounds weights`() {
         val userId = UUID.randomUUID()
         val p = portfolio(userId)
         `when`(portfolioRepo.findByIdAndUserIdAndDeletedAtIsNull(p.id!!, userId))
@@ -317,11 +317,11 @@ class HoldingServiceTest {
         `when`(holdingRepo.findAllByPortfolioId(p.id!!, Pageable.unpaged()))
             .thenReturn(PageImpl(listOf(h1, h2)))
 
-        val out = service.getSummary(userId, p.id!!, limit = 10, sort = "marketValue,desc")
+        val out = service.getSummary(userId, p.id!!, limit = 10, sort = "bookValue,desc")
 
         assertThat(out).hasSize(2)
         assertThat(out[0].id).isEqualTo(h2.id)
-        assertThat(out[0].marketValue).isEqualByComparingTo("2")
+        assertThat(out[0].bookValue).isEqualByComparingTo("2")
         assertThat(out[0].weight).isEqualByComparingTo("0.66666667")
         assertThat(out[1].id).isEqualTo(h1.id)
         assertThat(out[1].weight).isEqualByComparingTo("0.33333333")

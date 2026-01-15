@@ -18,6 +18,6 @@ data class PortfolioHoldingResponse(
     val symbol: String,
     val quantity: BigDecimal?,
     val avgCost: BigDecimal?,
-    val marketValue: BigDecimal? = null,
+    val bookValue: BigDecimal? = null,
     val asOf: Instant? = null,
 )

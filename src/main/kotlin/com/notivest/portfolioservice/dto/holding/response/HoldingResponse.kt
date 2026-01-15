@@ -11,7 +11,7 @@ data class HoldingResponse(
     val quantity: BigDecimal?,
     val avgCost: BigDecimal?,
     val asOf: Instant,
-    val marketValue: BigDecimal,
+    val bookValue: BigDecimal,
     val note: String? = null,
     val createdAt: Instant,
     val updatedAt: Instant,

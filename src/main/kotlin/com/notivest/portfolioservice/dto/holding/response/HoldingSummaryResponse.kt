@@ -9,7 +9,7 @@ data class HoldingSummaryResponse(
     val symbol: String,
     val quantity: BigDecimal,
     val avgCost: BigDecimal,
-    val marketValue: BigDecimal,
+    val bookValue: BigDecimal,
     val weight: BigDecimal,
     val asOf: Instant,
 )

@@ -51,7 +51,7 @@ class HoldingController(
     fun getSummary(
         @PathVariable portfolioId: UUID,
         @RequestParam(defaultValue = "10") limit: Int,
-        @RequestParam(defaultValue = "marketValue,desc") sort: String,
+        @RequestParam(defaultValue = "bookValue,desc") sort: String,
         @AuthenticationPrincipal jwt: Jwt,
     ): List<HoldingSummaryResponse> {
         val userId = userIdResolver.requireUserId(jwt)

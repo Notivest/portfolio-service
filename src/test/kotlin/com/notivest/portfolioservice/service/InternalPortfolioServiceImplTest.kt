@@ -81,15 +81,15 @@ class InternalPortfolioServiceImplTest {
         val growth = out.first { it.id == p1.id }
         assertThat(growth.holdings).hasSize(2)
         assertThat(growth.holdings?.map { it.symbol }).containsExactlyInAnyOrder("AAPL", "MSFT")
-        assertThat(growth.holdings?.all { it.marketValue != null }).isTrue()
+        assertThat(growth.holdings?.all { it.bookValue != null }).isTrue()
         assertThat(growth.holdings?.all { it.asOf != null }).isTrue()
-        assertThat(growth.holdings?.first { it.symbol == "AAPL" }?.marketValue).isEqualByComparingTo("1000.0")
+        assertThat(growth.holdings?.first { it.symbol == "AAPL" }?.bookValue).isEqualByComparingTo("1000.0")
         assertThat(growth.holdings?.first { it.symbol == "AAPL" }?.asOf).isEqualTo(Instant.parse("2024-01-02T00:00:00Z"))
 
         val income = out.first { it.id == p2.id }
         assertThat(income.holdings).hasSize(1)
         assertThat(income.holdings?.first()?.symbol).isEqualTo("BTC")
-        assertThat(income.holdings?.first()?.marketValue).isEqualByComparingTo("1000.0")
+        assertThat(income.holdings?.first()?.bookValue).isEqualByComparingTo("1000.0")
         assertThat(income.holdings?.first()?.asOf).isEqualTo(Instant.parse("2024-01-02T00:00:00Z"))
 
         verify(portfolioRepository).findAllByUserIdAndDeletedAtIsNull(userId)

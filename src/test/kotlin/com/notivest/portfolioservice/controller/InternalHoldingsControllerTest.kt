@@ -58,7 +58,7 @@ class InternalHoldingsControllerTest {
                     quantity = BigDecimal("2.5"),
                     avgCost = BigDecimal("150.00"),
                     asOf = Instant.parse("2024-03-01T00:00:00Z"),
-                    marketValue = BigDecimal("375.00"),
+                    bookValue = BigDecimal("375.00"),
                     updatedAt = Instant.parse("2024-03-01T00:00:00Z"),
                 ),
                 HoldingSearchResponse(
@@ -68,7 +68,7 @@ class InternalHoldingsControllerTest {
                     quantity = BigDecimal("5.0"),
                     avgCost = BigDecimal("310.00"),
                     asOf = Instant.parse("2024-03-02T00:00:00Z"),
-                    marketValue = BigDecimal("1550.00"),
+                    bookValue = BigDecimal("1550.00"),
                     updatedAt = Instant.parse("2024-03-02T00:00:00Z"),
                 ),
             )

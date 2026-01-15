@@ -59,7 +59,7 @@ class UserHoldingsSearchServiceImpl(
 
             val quantity = holding.quantity
             val avgCost = holding.avgCost
-            val marketValue =
+            val bookValue =
                 if (quantity != null && avgCost != null) {
                     quantity * avgCost
                 } else {
@@ -73,7 +73,7 @@ class UserHoldingsSearchServiceImpl(
                 quantity = holding.quantity,
                 avgCost = holding.avgCost,
                 asOf = updatedAt,
-                marketValue = marketValue,
+                bookValue = bookValue,
                 updatedAt = updatedAt,
             )
         }

@@ -56,13 +56,13 @@ class InternalPortfolioControllerTest {
                     symbol = "AAPL",
                     quantity = BigDecimal("10.0"),
                     avgCost = BigDecimal("150.0"),
-                    marketValue = BigDecimal("1500.0"),
+                    bookValue = BigDecimal("1500.0"),
                     weight = BigDecimal("1.0"),
                     asOf = Instant.parse("2024-03-01T00:00:00Z"),
                 ),
             )
 
-        whenever(holdingService.getSummary(userId, portfolioId, 10, "marketValue,desc"))
+        whenever(holdingService.getSummary(userId, portfolioId, 10, "bookValue,desc"))
             .thenReturn(response)
 
         mockMvc
@@ -70,13 +70,13 @@ class InternalPortfolioControllerTest {
                 get("/internal/v1/portfolios/$portfolioId/holdings/summary")
                     .queryParam("userId", userId.toString())
                     .queryParam("limit", "10")
-                    .queryParam("sort", "marketValue,desc")
+                    .queryParam("sort", "bookValue,desc")
                     .accept(MediaType.APPLICATION_JSON)
                     .with(jwt().authorities(SimpleGrantedAuthority("SCOPE_portfolio:read:user-context"))),
             ).andExpect(status().isOk)
             .andExpect(jsonPath("$[0].symbol").value("AAPL"))
 
-        verify(holdingService).getSummary(userId, portfolioId, 10, "marketValue,desc")
+        verify(holdingService).getSummary(userId, portfolioId, 10, "bookValue,desc")
     }
 
     @Test
