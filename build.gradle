@@ -60,6 +60,8 @@ dependencies {
 	testImplementation("org.assertj:assertj-core:3.26.0")
 	testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
 	testRuntimeOnly 'com.h2database:h2'
+
+    implementation("com.google.cloud.sql:postgres-socket-factory:1.17.0")
 }
 
 kotlin {
