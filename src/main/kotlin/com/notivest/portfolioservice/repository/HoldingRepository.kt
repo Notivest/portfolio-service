@@ -32,6 +32,10 @@ interface HoldingRepository : JpaRepository<HoldingEntity, UUID> {
         symbol: String,
     ): Optional<HoldingEntity>
 
+    fun deleteByPortfolioIdIn(portfolioIds: Collection<UUID>): Long
+
+    fun countByPortfolioIdIn(portfolioIds: Collection<UUID>): Long
+
     @Query(
         """
         select h from HoldingEntity h

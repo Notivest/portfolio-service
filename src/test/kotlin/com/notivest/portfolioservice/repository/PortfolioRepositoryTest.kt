@@ -1,12 +1,12 @@
 package com.notivest.portfolioservice.repository
 
+import com.notivest.portfolioservice.BaseIntegrationTest
 import com.notivest.portfolioservice.models.portfolio.PortfolioEntity
 import com.notivest.portfolioservice.models.portfolio.PortfolioStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.ActiveProfiles
@@ -15,8 +15,8 @@ import java.util.UUID
 
 @ActiveProfiles("test")
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = Replace.NONE) // usa H2 + Flyway del profile test
-class PortfolioRepositoryTest {
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class PortfolioRepositoryTest : BaseIntegrationTest() {
     @Autowired
     lateinit var portfolioRepository: PortfolioRepository
 

@@ -19,4 +19,8 @@ interface HoldingMovementRepository : JpaRepository<HoldingMovementEntity, UUID>
         symbol: String,
         pageable: Pageable,
     ): Page<HoldingMovementEntity>
+
+    fun deleteByPortfolioIdIn(portfolioIds: Collection<UUID>): Long
+
+    fun countByPortfolioIdIn(portfolioIds: Collection<UUID>): Long
 }

@@ -1,5 +1,6 @@
 package com.notivest.portfolioservice.repository
 
+import com.notivest.portfolioservice.BaseIntegrationTest
 import com.notivest.portfolioservice.models.HoldingEntity
 import com.notivest.portfolioservice.models.portfolio.PortfolioEntity
 import com.notivest.portfolioservice.models.portfolio.PortfolioStatus
@@ -18,7 +19,7 @@ import java.util.UUID
 @ActiveProfiles("test")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class HoldingRepositoryTest {
+class HoldingRepositoryTest : BaseIntegrationTest() {
     @Autowired lateinit var holdingRepository: HoldingRepository
 
     @Autowired lateinit var portfolioRepository: PortfolioRepository

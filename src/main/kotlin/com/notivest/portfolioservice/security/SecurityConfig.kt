@@ -61,6 +61,7 @@ class SecurityConfig(
                 it.requestMatchers(
                     "/internal/v1/holdings/search",
                     "/internal/v1/portfolios/**",
+                    "/internal/v1/user-data",
                 )
                     .hasAuthority("SCOPE_portfolio:read:user-context")
                 it.anyRequest().authenticated()
